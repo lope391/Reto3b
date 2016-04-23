@@ -1,5 +1,6 @@
 package reto4;
 
+import reto3b.Objeto3D;
 import reto3b.Punto3Dh;
 
 import java.io.*;
@@ -33,53 +34,70 @@ public class FileReader {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        leerObjeto();
+        //leerObjeto(); Esto es de cuando leerObjeto era un void
 
 
     }
 
-    private void leerObjeto() {
+    public Objeto3D[] leerObjetos() throws IOException {
 
         int numeroPuntos = 0;
+        int numeroAristas = 0;
+        int numeroObjetos = 0;
+
 
         String[] aristaStr = null;
         String[] punto = null;
 
-        try {
-            numeroPuntos = Integer.parseInt(br.readLine());
-            for (int i = 0; i < numeroPuntos; i++) {
-                punto = br.readLine().split(" ");
-                listaPuntos.add(new Punto3Dh(Double.parseDouble(punto[0]), Double.parseDouble(punto[1]), Double.parseDouble(punto[2])));
+        numeroObjetos= Integer.parseInt(br.readLine());
+        Objeto3D[] objetos= new Objeto3D[numeroObjetos];
 
+
+        for (int k = 0; k < numeroObjetos; k++) {
+
+
+            listaAristas = new LinkedList<int[]>();
+            listaPuntos = new LinkedList<Punto3Dh>();
+            try {
+                numeroPuntos = Integer.parseInt(br.readLine());
+                for (int i = 0; i < numeroPuntos; i++) {
+                    punto = br.readLine().split(" ");
+                    listaPuntos.add(new Punto3Dh(Double.parseDouble(punto[0]), Double.parseDouble(punto[1]), Double.parseDouble(punto[2])));
+
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        int numeroAristas = 0;
-        try {
-            numeroAristas = Integer.parseInt(br.readLine());
 
-            for (int j=0; j < numeroAristas; j++) {
+            try {
+                numeroAristas = Integer.parseInt(br.readLine());
 
-                aristaStr = br.readLine().split(" ");
-                int[] arista = new int[2];
-                arista[0] = Integer.parseInt(aristaStr[0]);
-                arista [1] = Integer.parseInt(aristaStr[1]);
-                listaAristas.add(arista);
+                for (int j = 0; j < numeroAristas; j++) {
+
+                    aristaStr = br.readLine().split(" ");
+                    int[] arista = new int[2];
+                    arista[0] = Integer.parseInt(aristaStr[0]);
+                    arista[1] = Integer.parseInt(aristaStr[1]);
+                    listaAristas.add(arista);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            objetos[k] = new Objeto3D(listaAristas, listaPuntos);
+
         }
+
+        return objetos;
 
 
     }
 
-    public List<Punto3Dh> getPuntos() {
+    /*public List<Punto3Dh> getPuntos() {
         return listaPuntos;
     }
 
     public List<int[]> getAristas() {
         return listaAristas;
-    }
+    }*/
 
 }
